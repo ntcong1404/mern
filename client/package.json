@@ -23,7 +23,7 @@
     "redux-saga": "^1.2.3"
   },
   "devDependencies": {
-    "@types/react": "^18.2.16",
+    "@types/react": "^17.0.37",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.0.3",
     "eslint": "^8.45.0",
