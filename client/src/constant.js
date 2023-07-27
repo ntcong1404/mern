@@ -5,5 +5,10 @@ export const INIT_STATE = {
   },
   modal: {
     isShow: false,
+    isShowEdit: false,
+  },
+
+  popover: {
+    anchorEl: null,
   },
 };

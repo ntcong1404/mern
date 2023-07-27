@@ -24,3 +24,9 @@ export const updatePost = createActions({
 
 export const showModal = createAction("SHOW_CREATE_POST_MODAL");
 export const hideModal = createAction("HIDE_CREATE_POST_MODAL");
+
+export const showEditModal = createAction("SHOW_EDIT_POST_MODAL");
+export const hideEditModal = createAction("HIDE_EDIT_POST_MODAL");
+
+export const setAnchorEl = createAction("SET_ANCHOR_EL");
+export const clearAnchorEl = createAction("CLEAR_ANCHOR_EL");

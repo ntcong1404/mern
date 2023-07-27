@@ -7,18 +7,48 @@ import {
   CardMedia,
   IconButton,
   Typography,
+  Button,
+  Popover,
 } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import moment from "moment";
-import useStyles from "./styles";
 import { useCallback } from "react";
-import { useDispatch } from "react-redux";
-import { updatePost } from "../../../redux/actions";
+import { useDispatch, useSelector } from "react-redux";
+import useStyles from "./styles";
+import {
+  updatePost,
+  setAnchorEl,
+  clearAnchorEl,
+  showEditModal,
+} from "../../../redux/actions";
+import { anchorElSelector$ } from "../../../redux/selectors";
 
-export default function PostList({ post }) {
+export default function PostItem({ post, setPost }) {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { anchorEl } = useSelector(anchorElSelector$);
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
+
+  const handleClick = useCallback(
+    (event) => {
+      setPost(post);
+      console.log(post);
+      dispatch(setAnchorEl(event.currentTarget));
+    },
+    [dispatch]
+  );
+
+  const handleClose = useCallback(() => {
+    dispatch(clearAnchorEl());
+  }, [dispatch]);
+
+  const handleOpenEditPostModal = useCallback(() => {
+    dispatch(showEditModal());
+    handleClose();
+  }, [dispatch, handleClose]);
 
   const onLikeBtnClick = useCallback(() => {
     dispatch(
@@ -27,15 +57,42 @@ export default function PostList({ post }) {
   }, [dispatch, post]);
 
   return (
-    <Card>
+    <Card className={classes.card}>
       <CardHeader
         avatar={<Avatar>A</Avatar>}
         title={post.author}
         subheader={moment(post.updatedAt).format("HH:MM MMM DD, YYYY")}
         action={
-          <IconButton>
-            <MoreVertIcon />
-          </IconButton>
+          <div>
+            <IconButton aria-describedby={id} onClick={handleClick}>
+              <MoreVertIcon />
+            </IconButton>
+            <Popover
+              id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "center",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "center",
+              }}
+            >
+              <Button variant="contained" fullWidth>
+                Delete
+              </Button>
+              <Button
+                variant="contained"
+                fullWidth
+                onClick={handleOpenEditPostModal}
+              >
+                Edit
+              </Button>
+            </Popover>
+          </div>
         }
       />
       <CardMedia
@@ -44,10 +101,15 @@ export default function PostList({ post }) {
         className={classes.media}
       />
       <CardContent>
-        <Typography variant="h5" color="textPrimary">
+        <Typography className={classes.title} variant="h5" color="textPrimary">
           {post.title}
         </Typography>
-        <Typography variant="body2" component="p" color="textSecondary">
+        <Typography
+          className={classes.content}
+          variant="body2"
+          component="p"
+          color="textSecondary"
+        >
           {post.content}
         </Typography>
       </CardContent>

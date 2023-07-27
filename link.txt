@@ -1,0 +1,2 @@
+client : https://mern-ntcog.vercel.app/
+server : https://blog-app-ntcog.onrender.com

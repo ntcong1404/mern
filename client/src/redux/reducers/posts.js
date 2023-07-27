@@ -31,6 +31,7 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
           post._id === action.payload._id ? action.payload : post
         ),
       };
+
     default:
       return state;
   }

@@ -3,42 +3,38 @@ import FileBase64 from "react-file-base64";
 import { useSelector, useDispatch } from "react-redux";
 import { modalState$ } from "../../redux/selectors";
 import useStyles from "./styles.js";
-import { useCallback, useState } from "react";
-import { createPost, hideModal } from "../../redux/actions";
+import { useCallback, useEffect, useState } from "react";
+import { hideEditModal, updatePost } from "../../redux/actions";
 
-export default function CreatePostModal() {
-  const [data, setData] = useState({
-    title: "",
-    content: "",
-    attachment: "",
-  });
+export default function EditPostModal({ post }) {
+  console.log(post);
+  const [data, setData] = useState(post);
   const dispatch = useDispatch();
-  const { isShow } = useSelector(modalState$);
+  const { isShowEdit } = useSelector(modalState$);
   const classes = useStyles();
 
+  useEffect(() => {
+    if (post) setData(post);
+  }, [post]);
+
   const onClose = useCallback(() => {
-    dispatch(hideModal());
-    setData({
-      title: "",
-      content: "",
-      attachment: "",
-    });
+    dispatch(hideEditModal());
   }, [dispatch]);
 
   const onSubmit = useCallback(() => {
-    dispatch(createPost.createPostRequest(data));
+    dispatch(updatePost.updatePostRequest(data));
     onClose();
   }, [data, dispatch, onClose]);
 
   const body = (
     <div className={classes.paper} id="simple-modal-title">
-      <h2>Create new Post</h2>
+      <h2>Edit Post</h2>
       <form noValidate autoComplete="off" className={classes.form}>
         <TextField
           className={classes.title}
           required
           label="title"
-          value={data.title}
+          value={data?.title}
           onChange={(e) => setData({ ...data, title: e.target.value })}
         />
         <TextareaAutosize
@@ -46,14 +42,14 @@ export default function CreatePostModal() {
           minRows={10}
           maxRows={15}
           placeholder="Content..."
-          value={data.content}
+          value={data?.content}
           onChange={(e) => setData({ ...data, content: e.target.value })}
         />
         <FileBase64
           accept="image/*"
           multiple={false}
           type="file"
-          value={data.attachment}
+          value={data?.attachment}
           onDone={({ base64 }) => setData({ ...data, attachment: base64 })}
         />
         <div className={classes.footer}>
@@ -64,7 +60,7 @@ export default function CreatePostModal() {
             fullWidth
             onClick={onSubmit}
           >
-            Create
+            Save
           </Button>
         </div>
       </form>
@@ -73,7 +69,7 @@ export default function CreatePostModal() {
 
   return (
     <div>
-      <Modal open={isShow} onClose={onClose}>
+      <Modal open={isShowEdit} onClose={onClose}>
         {body}
       </Modal>
     </div>
