@@ -16,4 +16,7 @@ export default makeStyles(() => ({
     height: 250,
     objectFit: "cover",
   },
+  button: {
+    fontSize: 16,
+  },
 }));

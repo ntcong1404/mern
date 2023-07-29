@@ -35,3 +35,13 @@ export const updatePost = async (req, res) => {
     res.status(500).json({ error: err });
   }
 };
+
+export const deletePost = async (req, res) => {
+  try {
+    const deletePost = req.body;
+    const post = await PostModel.findByIdAndDelete(deletePost._id);
+    res.status(200).json(post);
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
+};

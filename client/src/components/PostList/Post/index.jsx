@@ -12,6 +12,8 @@ import {
 } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +23,7 @@ import {
   setAnchorEl,
   clearAnchorEl,
   showEditModal,
+  deletePost,
 } from "../../../redux/actions";
 import { anchorElSelector$ } from "../../../redux/selectors";
 
@@ -35,10 +38,9 @@ export default function PostItem({ post, setPost }) {
   const handleClick = useCallback(
     (event) => {
       setPost(post);
-      console.log(post);
       dispatch(setAnchorEl(event.currentTarget));
     },
-    [dispatch]
+    [dispatch, post, setPost]
   );
 
   const handleClose = useCallback(() => {
@@ -55,6 +57,12 @@ export default function PostItem({ post, setPost }) {
       updatePost.updatePostRequest({ ...post, likeCount: post.likeCount + 1 })
     );
   }, [dispatch, post]);
+
+  const handleDeletePost = useCallback(() => {
+    dispatch(deletePost.deletePostRequest({ post }));
+    console.log(post);
+    handleClose();
+  }, [dispatch, post, handleClose]);
 
   return (
     <Card className={classes.card}>
@@ -81,16 +89,12 @@ export default function PostItem({ post, setPost }) {
                 horizontal: "center",
               }}
             >
-              <Button variant="contained" fullWidth>
-                Delete
-              </Button>
-              <Button
-                variant="contained"
-                fullWidth
-                onClick={handleOpenEditPostModal}
-              >
-                Edit
-              </Button>
+              <IconButton onClick={handleDeletePost}>
+                <DeleteIcon />
+              </IconButton>
+              <IconButton onClick={handleOpenEditPostModal}>
+                <EditIcon />
+              </IconButton>
             </Popover>
           </div>
         }

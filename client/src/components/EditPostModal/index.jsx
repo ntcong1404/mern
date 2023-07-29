@@ -7,7 +7,6 @@ import { useCallback, useEffect, useState } from "react";
 import { hideEditModal, updatePost } from "../../redux/actions";
 
 export default function EditPostModal({ post }) {
-  console.log(post);
   const [data, setData] = useState(post);
   const dispatch = useDispatch();
   const { isShowEdit } = useSelector(modalState$);
